@@ -12,6 +12,7 @@
 
 
 #### Cracking the coding Interview
+	1. [ArrayLeftRotation](https://github.com/rpraval1/codeschool/blob/master/crackingthecoding/arrayleftrotation/index.py)
 
 
 

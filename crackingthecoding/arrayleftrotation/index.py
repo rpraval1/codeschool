@@ -1,3 +1,9 @@
+"""
+:Author: Pravallika
+:Platform: Cracking the coding interview
+:Link: https://www.hackerrank.com/challenges/ctci-array-left-rotation
+"""
+
 def arrayLeftRotate(list,n,k):
 	#list = list of elements
 	#n = size of the list
