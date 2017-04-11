@@ -1,4 +1,4 @@
-# Coding practice on various platforms
+# Code snippets from coding platforms and from my projects
 
 
 - [HackerRank](https://github.com/rpraval1/codeschool#hackerrank)
