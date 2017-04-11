@@ -9,10 +9,7 @@ class Schedule(object):
 		self.hour = hour
 		self.min = min
 	
-	#def __iter__(self):
-		#return iter(self)
 	def __str__(self):
-		#return "ytest"
 		return "Room: %d is booked for %d:%d" % (self.roomId, self.hour, self.min)
 
 
