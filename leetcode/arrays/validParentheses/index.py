@@ -11,16 +11,32 @@ class ValidParentheses(object):
 		:rtype: bool
 		"""
 		parentheses = {'(':')', '[':']', '{':'}'}
-		myList = []
-		myListLength = len(myList)
+		openPar = []
+		openLen = len(openPar)
+		closedCount = 0
+
 		for currChar in myString:
 			if currChar in parentheses:
-				myList.append(currChar)
-			elif  myListLength != 0 or parentheses[myList.pop()] != currChar:
-				return False
-		if myListLength == 0:
+				openPar.append(currChar)
+			if currChar in parentheses.values():
+				closedCount += 1
+
+		if openLen != closedCount:
+			return False
+		else:
+			for currChar in parentheses:
+				if currChar in openPar:
+					continue
+				else:
+					if parentheses[openPar.pop()] != currChar:
+						return False
+		if openLen == 0:
 			return True
-	
+
+
+
+
+
 validPar = ValidParentheses()
-myString = '{[(]]}'
+myString = '['
 print(validPar.isValid(myString))
