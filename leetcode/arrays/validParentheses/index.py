@@ -12,26 +12,20 @@ class ValidParentheses(object):
 		"""
 		parentheses = {'(':')', '[':']', '{':'}'}
 		openPar = []
-		openLen = len(openPar)
-		closedCount = 0
 
 		for currChar in myString:
 			if currChar in parentheses:
-				openPar.append(currChar)
-			if currChar in parentheses.values():
-				closedCount += 1
-
-		if openLen != closedCount:
-			return False
-		else:
-			for currChar in parentheses:
-				if currChar in openPar:
-					continue
+				openPar.insert(0,currChar)
+			else:
+				if len(openPar) == 0:
+					return False
+				if parentheses[openPar[0]] != currChar:
+					return False
 				else:
-					if parentheses[openPar.pop()] != currChar:
-						return False
-		if openLen == 0:
-			return True
+					openPar.pop(0)
+		if len(openPar) > 0:
+			return False
+		return True
 
 
 
