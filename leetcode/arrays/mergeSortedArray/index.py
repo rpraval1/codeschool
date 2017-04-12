@@ -14,21 +14,25 @@ class MergeSorted(object):
 		"""
 		i = 0 
 		j = 0
-		result = []
+
 		while i<m and j<n:
 			print(i,j)
 			if nums1[i] > nums2[j]:
-				result.append(nums2[j])
+				
+				nums1.append(nums2[j])
+				if j == n-1 and i == m-1:
+					nums1.append(nums1[i])
 				j = j+1
 			else:
-				result.append(nums1[i])
+				nums1.append(nums1[i])
+				if i == m-1 and j == n-1:
+					nums1.append(nums2[j])
 				i = i+1
-		  	if i == m:
-				result.append(nums1[i])
-			elif j == n:
-				result.append(nums2[j])
-				 
-		print(result)
+
+		for i in range(m):
+			nums1.pop(0)
+		
+		print(nums1)	
 
 
 merge = MergeSorted()
