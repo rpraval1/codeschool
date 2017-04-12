@@ -16,27 +16,29 @@ class MinWindow(object):
 		for c in t:
 			tFreq[c] = tFreq.get(c,0)+1
 		
-		tempFreq = {}
+		tempFreq = tFreq.copy()
 		ptr1 = 0
 		result = ''
 
 		for i,c in enumerate(s):
-			if c in tFreq:
-				tempFreq[c] = tempFreq.get(c,0)+1
-				if tempFreq[c] > tFreq[c]:
-					ptr += 1
-					i = ptr1
-					tempFreq = {}
 			print(tempFreq)
-			if tempFreq == tFreq:
-				print(tempFreq)
+			if c in tempFreq:
+				if tempFreq[c] >= 1:
+					tempFreq[c] -= 1
+				else:
+					ptr1 += 1
+					i = ptr1
+					tempFreq = tFreq.copy()
+			
+			if all(value == 0 for value in tempFreq.values()):
+				print(s[ptr1:i+1])
 				if result == '':
 					result = s[ptr1:i+1]
 				elif len(result) > len(s[ptr1:i+1]):
 					result = s[ptr1:i+1]
 				ptr1 = ptr1 + 1
 				i = ptr1
-				tempFreq = {}
+				tempFreq = tFreq.copy()
 		print(result)
 		
 minWindow = MinWindow()
