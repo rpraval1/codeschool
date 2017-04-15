@@ -12,35 +12,43 @@ class MinWindow(object):
 		:rtype: str
 		"""
 		
-		tFreq = {}
+		expectCount = [0]*52
+		currCount = [0]*52
+		
 		for c in t:
-			tFreq[c] = tFreq.get(c,0)+1
-		
-		tempFreq = tFreq.copy()
-		ptr1 = 0
-		result = ''
+			expectCount[ord(c)-ord('a')] += 1
 
-		for i,c in enumerate(s):
-			print(tempFreq)
-			if c in tempFreq:
-				if tempFreq[c] >= 1:
-					tempFreq[c] -= 1
-				else:
-					ptr1 += 1
-					i = ptr1
-					tempFreq = tFreq.copy()
-			
-			if all(value == 0 for value in tempFreq.values()):
-				print(s[ptr1:i+1])
-				if result == '':
-					result = s[ptr1:i+1]
-				elif len(result) > len(s[ptr1:i+1]):
-					result = s[ptr1:i+1]
-				ptr1 = ptr1 + 1
-				i = ptr1
-				tempFreq = tFreq.copy()
-		print(result)
+		i = 0
+		count = 0
+		start = 0
+		minWidth = float("inf")
+		minStart = 0
 		
-minWindow = MinWindow()
-minWindow.minWindowSubstring("ADOBECODEBANC","ABC")
-	
+		while i<len(s):
+			currCount[ord(s[i])-ord('a')] += 1
+			
+			if currCount[ord(s[i])-ord('a')] <= expectCount[ord(s[i])-ord('a')]:
+				count += 1
+			
+			if count == len(t):
+				while expectCount[ord(s[start])-ord('a')]==0 or currCount[ord(s[start])-ord('a')] > expectCount[ord(s[start])-ord('a')]:
+					currCount[ord(s[start])-ord('a')] -= 1
+					start += 1
+				
+				if minWidth > i-start+1:
+					minWidth = i-start+1
+					minStart = start		
+		
+
+			i = i+1
+			
+		if minWidth == float("inf"):
+			return ""
+		
+		return s[minStart:minStart + minWidth]
+		
+			
+obj = MinWindow()
+s = "ADOBECODEBANC"
+t = "ABC"
+print(obj.minWindowSubstring(s,t)) 
