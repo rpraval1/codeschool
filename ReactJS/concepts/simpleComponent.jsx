@@ -1,7 +1,7 @@
-"""
+{/*
 :Author: Pravallika
 :Description: A simple component in ReactJS
-"""
+*/}
 
    import React from 'react';
 
