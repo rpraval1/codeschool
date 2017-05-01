@@ -1,0 +1,145 @@
+  <!-- Enter your HTML code here -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+  // Add your javascript here
+  // To hit the API, replace the protocol and domain portion, as well as the API protocol with: https://population.simonsfoundation.org/
+  //IE http://api.population.io:80/1.0/countries becomes https://population.simonsfoundation.org/countries
+  // A sample can be seen below
+  // Notice the use of jsonp instead of json for dataType. This is required, as this is how our backend api proxy works
+
+
+$( document ).ready(function() {
+    var retVal = null;
+    var shortestCountriesPopulation = []
+    var largestPopulation = []
+
+    function getPopulationByCountry(year, countryName){
+        url = 'https://population.simonsfoundation.org/population/'+year+'/'+countryName;
+        console.debug('Hitting url: ' + url);
+        var totalPopulation = 0
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: "jsonp",
+            success: function(data){
+              for (let currentAgeGroup of data){
+                  totalPopulation += parseInt(currentAgeGroup.total)
+              }
+              var newObj = {}
+              newObj['country'] = countryName
+              newObj['totalPopulation']= totalPopulation
+              shortestCountriesPopulation.push(newObj)
+            },
+        });
+
+    }
+
+    testAPICall()
+    function testAPICall(){
+        url = 'https://population.simonsfoundation.org/countries'
+        console.debug('Hitting url: ' + url);
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            success: function(data){
+              console.debug('Response:');
+              console.debug(data);
+              var sortedByLength = data.countries.sort((a,b) => a.length - b.length)
+              var shortestCountryLen = sortedByLength[0].length
+
+              for (let country of sortedByLength){
+                  if(country === country.toUpperCase()) continue;
+                  if(country.length == shortestCountryLen){
+                      getPopulationByCountry(2016,country)
+                  }
+              }
+              console.log(shortestCountriesPopulation)
+
+              setTimeout(function(){
+                shortestCountriesPopulation.sort((a, b) => b['totalPopulation'] - a['totalPopulation'])
+                console.log(shortestCountriesPopulation)
+                var i =0;
+                $("#list_countries").html("");
+                while(i<5){
+                  $("#list_countries").append("<li id="+shortestCountriesPopulation[i].country+" class='items'>"+shortestCountriesPopulation[i].country+"</li>")
+                  i++;
+                }
+
+
+              }, 1000);
+
+            },
+            error: function (err){
+              $("#countries").append(err);
+            },
+            dataType: "jsonp"
+        });
+    }
+
+
+
+    $( document ).on( "click", "ul#list_countries li", function() {
+      $(this).css("border-color","red")
+      var country = $(this).text()
+      //console.log(country)
+      url = 'https://population.simonsfoundation.org/population/2016/'+country+"/18";
+      console.debug('Hitting url: ' + url);
+      var totalPopulation = 0
+
+      $.ajax({
+          url: url,
+          method: 'GET',
+          dataType: "jsonp",
+          success: function(data){
+            var data1 = "<div><ul class='population_list'><li>Females: "+data[0].females+"</li><li>Males: "+data[0].males+"</li><li>Total: "+data[0].total+"</li></ul></div>";
+            //console.log(data1)
+            $("#"+country).append(data1)
+          },
+      });
+    });
+
+    $( document ).on( "mouseleave", "ul#list_countries li", function() {
+      $(this).css("border-color","blue")
+      var country = $(this).attr("id")
+      $("#"+country).html(country)
+
+    });
+
+
+})
+
+
+</script>
+<style>
+  #list_countries li{
+    border: blue 2px solid;
+    width: 400px;
+    padding: 5px;
+    cursor: pointer;
+  }
+  .population_list li{
+    border: red 2px solid!important;
+    overflow: hidden;
+    width: inherit!important;
+  }
+</style>
+<title>Countries, Ajax, and APIs OH MY!</title>
+</head>
+<body>
+<div id="app">
+    Countries List:
+    <div id="countries">
+      <ul id="list_countries">
+        Loading...
+      </ul>
+    </div>
+</div>
+
+</body>
+</html>
